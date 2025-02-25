@@ -1,16 +1,27 @@
 package br.com.alex.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
+@Table(name = "person") // quando quiser o nome da tabela diferente mudar aqui
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id // aqui não precisa indicar q é coluna pois com o @Id já entende q é
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "first_name", nullable = false, length = 80)
     private String firstName;
+    @Column(name = "last_name", nullable = false, length = 80)
     private String lastName;
+    @Column(nullable = false, length = 100) // quando não é passado o nome da coluna é 'pegado' o msm da classe, address.
     private String address;
+    @Column(nullable = false, length = 6)
     private String gender;
 
     public Person() { }

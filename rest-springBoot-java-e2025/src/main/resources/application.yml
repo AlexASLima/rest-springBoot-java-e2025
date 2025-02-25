@@ -1,1 +1,16 @@
-spring.application.name=rest-springBoot-java-e2025
+spring:
+  application:
+    name: rest-springboot-java-e2025
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/rest-springboot-java-e2025?useTimezone=true&serverTimezone=UTC
+    username: developer
+    password: 1234567
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+    show-sql: false
+    # add essa config. abaixo para não aparecer o warning (HHH000489: No JTA platform available) ao rodar.
+    open-in-view: false
