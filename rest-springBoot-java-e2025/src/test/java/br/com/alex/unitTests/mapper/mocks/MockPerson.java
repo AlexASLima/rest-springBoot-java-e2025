@@ -3,7 +3,7 @@ package br.com.alex.unitTests.mapper.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.alex.data.dto.PersonDTO;
+import br.com.alex.data.dto.v1.PersonDTO;
 import br.com.alex.model.Person;
 
 public class MockPerson {

@@ -1,4 +1,4 @@
-package br.com.alex.data.dto;
+package br.com.alex.data.dto.v1;
 
 import java.io.Serializable;
 import java.util.Objects;

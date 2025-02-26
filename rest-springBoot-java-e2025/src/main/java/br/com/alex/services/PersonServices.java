@@ -1,12 +1,14 @@
 package br.com.alex.services;
 
+import br.com.alex.data.dto.v2.PersonDTOv2;
 import br.com.alex.exception.ResourceNotFoundException;
 // import br.com.alex.mapper.ObjectMapper;
 import static br.com.alex.mapper.ObjectMapper.parseListObjects;
 import static br.com.alex.mapper.ObjectMapper.parseObject;
 
+import br.com.alex.mapper.custom.PersonMapper;
 import br.com.alex.model.Person;
-import br.com.alex.data.dto.PersonDTO;
+import br.com.alex.data.dto.v1.PersonDTO;
 import br.com.alex.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class PersonServices {
 
     @Autowired
     PersonRepository repository;
+
+    @Autowired
+    PersonMapper converter;
 
     public List<PersonDTO> findAll() {
         logger.info("Finding all People!");
@@ -46,6 +51,14 @@ public class PersonServices {
         var entity = parseObject(person, Person.class);
 
         return parseObject(repository.save(entity), PersonDTO.class);
+    }
+
+    public PersonDTOv2 createV2(PersonDTOv2 person) {
+        logger.info("Creating one Person V2!");
+
+        var entity = converter.convertDTOtoEntity(person);
+
+        return converter.convertEntityToDTO(repository.save(entity));
     }
 
     public PersonDTO update(PersonDTO person) {
