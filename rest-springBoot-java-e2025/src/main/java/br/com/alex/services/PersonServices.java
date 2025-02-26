@@ -1,7 +1,12 @@
 package br.com.alex.services;
 
 import br.com.alex.exception.ResourceNotFoundException;
+// import br.com.alex.mapper.ObjectMapper;
+import static br.com.alex.mapper.ObjectMapper.parseListObjects;
+import static br.com.alex.mapper.ObjectMapper.parseObject;
+
 import br.com.alex.model.Person;
+import br.com.alex.data.dto.PersonDTO;
 import br.com.alex.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,27 +23,34 @@ public class PersonServices {
     @Autowired
     PersonRepository repository;
 
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         logger.info("Finding all People!");
 
-        return repository.findAll();
+        // return ObjectMapper.parseListObjects(repository.findAll(), PersonDTO.class);
+        // como o método usado acima é estatico, pode-se importar como statico e usar diretamente como abaixo. Veja acima como é o import.
+        return parseListObjects(repository.findAll(), PersonDTO.class);
     }
 
-    public Person findById(Long id) {
-        logger.info("Finding one Person!");
+    public PersonDTO findById(Long id) {
+        logger.info("Finding one PersonDTO!");
 
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No record foound this Id"));
+        var entity = repository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("No record foound this Id"));
+
+        return parseObject(entity, PersonDTO.class);
     }
 
-    public Person create(Person person) {
+    public PersonDTO create(PersonDTO person) {
         logger.info("Creating one Person!");
 
-        return repository.save(person);
+        var entity = parseObject(person, Person.class);
+
+        return parseObject(repository.save(entity), PersonDTO.class);
     }
 
-    public Person update(Person person) {
+    public PersonDTO update(PersonDTO person) {
         logger.info("Updating one Person!");
+
         Person entity = repository.findById(person.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No records foound this Id"));
 
@@ -47,7 +59,7 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return repository.save(person);
+        return parseObject(repository.save(entity), PersonDTO.class);
     }
 
     public void delete(Long id) {
