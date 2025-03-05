@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
     @Autowired
     private PersonServices service;
@@ -18,7 +18,10 @@ public class PersonController {
 
     //@RequestMapping(method = RequestMethod.GET, abaixo substitui esse q é legado
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
     public List<PersonDTO> findAll() {
         return service.findAll();
@@ -27,7 +30,10 @@ public class PersonController {
     //@RequestMapping(value = "/{id}",
             //method = RequestMethod.GET,
     @GetMapping(value = "/{id}",
-                produces = MediaType.APPLICATION_JSON_VALUE
+                produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE}
     )
     public PersonDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
@@ -36,25 +42,44 @@ public class PersonController {
     //@RequestMapping(
             //method = RequestMethod.POST,
     @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE},
+            produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE}
     )
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
     }
+    /*
     @PostMapping(value = "/v2",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE},
+            produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE}
     )
     public PersonDTOv2 createV2(@RequestBody PersonDTOv2 person) {
         return service.createV2(person);
-    }
+    } */
 
     //@RequestMapping(
             //method = RequestMethod.PUT,
     @PutMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE},
+            produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.APPLICATION_YAML_VALUE}
     )
     public PersonDTO update(@RequestBody PersonDTO person) {
         return service.update(person);
