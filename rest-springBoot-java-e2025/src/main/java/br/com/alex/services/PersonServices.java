@@ -1,9 +1,12 @@
 package br.com.alex.services;
 
+import br.com.alex.controllers.PersonController;
 import br.com.alex.exception.ResourceNotFoundException;
 // import br.com.alex.mapper.ObjectMapper;
 import static br.com.alex.mapper.ObjectMapper.parseListObjects;
 import static br.com.alex.mapper.ObjectMapper.parseObject;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import br.com.alex.model.Person;
 import br.com.alex.data.dto.PersonDTO;
@@ -28,7 +31,9 @@ public class PersonServices {
 
         // return ObjectMapper.parseListObjects(repository.findAll(), PersonDTO.class);
         // como o método usado acima é estatico, pode-se importar como statico e usar diretamente como abaixo. Veja acima como é o import.
-        return parseListObjects(repository.findAll(), PersonDTO.class);
+        var persons = parseListObjects(repository.findAll(), PersonDTO.class);
+        persons.forEach(this::addHateoasLinks); // addHateoasLinks(dto); add os links para cada person.
+        return persons;
     }
 
     public PersonDTO findById(Long id) {
@@ -36,16 +41,20 @@ public class PersonServices {
 
         var entity = repository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("No record foound this Id"));
+        var dto =  parseObject(entity, PersonDTO.class);
+        addHateoasLinks(dto);
 
-        return parseObject(entity, PersonDTO.class);
+        return dto;
     }
 
     public PersonDTO create(PersonDTO person) {
         logger.info("Creating one Person!");
 
         var entity = parseObject(person, Person.class);
+        var dto = parseObject(repository.save(entity), PersonDTO.class);
 
-        return parseObject(repository.save(entity), PersonDTO.class);
+        addHateoasLinks(dto);
+        return dto;
     }
 
     public PersonDTO update(PersonDTO person) {
@@ -59,7 +68,10 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return parseObject(repository.save(entity), PersonDTO.class);
+        var dto = parseObject(repository.save(entity), PersonDTO.class);
+        addHateoasLinks(dto);
+
+        return dto;
     }
 
     public void delete(Long id) {
@@ -69,5 +81,13 @@ public class PersonServices {
                 .orElseThrow(() -> new ResourceNotFoundException("No records foound this Id"));
 
         repository.delete(entity);
+    }
+
+    private void addHateoasLinks(PersonDTO dto) {
+        dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
+        dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
     }
 }
