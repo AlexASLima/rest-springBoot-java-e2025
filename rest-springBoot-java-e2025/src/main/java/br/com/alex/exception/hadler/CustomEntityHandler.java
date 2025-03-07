@@ -1,6 +1,7 @@
 package br.com.alex.exception.hadler;
 
 import br.com.alex.exception.ExceptionResponse;
+import br.com.alex.exception.RequiredObjectIsNullException;
 import br.com.alex.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,14 @@ public class CustomEntityHandler extends ResponseEntityExceptionHandler {
                 ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RequiredObjectIsNullException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

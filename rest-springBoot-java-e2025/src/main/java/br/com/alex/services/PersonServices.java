@@ -1,6 +1,7 @@
 package br.com.alex.services;
 
 import br.com.alex.controllers.PersonController;
+import br.com.alex.exception.RequiredObjectIsNullException;
 import br.com.alex.exception.ResourceNotFoundException;
 // import br.com.alex.mapper.ObjectMapper;
 import static br.com.alex.mapper.ObjectMapper.parseListObjects;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @Service
 public class PersonServices {
-    private final AtomicLong counter = new AtomicLong();
+    // private final AtomicLong counter = new AtomicLong(); retirado para o testes mockito
     private Logger logger = Logger.getLogger(PersonServices.class.getName());
 
     @Autowired
@@ -48,6 +49,8 @@ public class PersonServices {
     }
 
     public PersonDTO create(PersonDTO person) {
+        if (person == null) throw  new RequiredObjectIsNullException();
+
         logger.info("Creating one Person!");
 
         var entity = parseObject(person, Person.class);
@@ -58,6 +61,8 @@ public class PersonServices {
     }
 
     public PersonDTO update(PersonDTO person) {
+        if (person == null) throw  new RequiredObjectIsNullException();
+
         logger.info("Updating one Person!");
 
         Person entity = repository.findById(person.getId())
