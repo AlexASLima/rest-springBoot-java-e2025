@@ -14,3 +14,8 @@ spring:
     show-sql: false
     # add essa config. abaixo para não aparecer o warning (HHH000489: No JTA platform available) ao rodar.
     open-in-view: false
+
+  spring-doc:
+    paths-to-match: /api/**/v1/**
+    swagger-ui:
+      use-root-path: true

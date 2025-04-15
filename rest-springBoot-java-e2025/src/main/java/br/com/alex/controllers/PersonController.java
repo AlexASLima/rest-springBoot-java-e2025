@@ -1,7 +1,9 @@
 package br.com.alex.controllers;
 
+import br.com.alex.controllers.docs.PersonControllerDocs;
 import br.com.alex.data.dto.PersonDTO;
 import br.com.alex.services.PersonServices;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/person/v1")
-public class PersonController {
+@Tag(name = "People", description = "Endpoints for Managingn People") // p/ swagger
+public class PersonController implements PersonControllerDocs {
     @Autowired
     private PersonServices service;
     // private PersonServices service = new PersonServices();
@@ -19,6 +22,8 @@ public class PersonController {
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+
+    @Override
     public List<PersonDTO> findAll() {
         return service.findAll();
     }
@@ -26,8 +31,10 @@ public class PersonController {
     //@RequestMapping(value = "/{id}",
             //method = RequestMethod.GET,
     @GetMapping(value = "/{id}",
-                produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
+
+    @Override
     public PersonDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
@@ -38,6 +45,7 @@ public class PersonController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Override
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
     }
@@ -48,6 +56,7 @@ public class PersonController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Override
     public PersonDTO update(@RequestBody PersonDTO person) {
         return service.update(person);
     }
@@ -56,9 +65,7 @@ public class PersonController {
             method = RequestMethod.DELETE
     ) */
     @DeleteMapping(value = "/{id}")
-    /*public void delete(@PathVariable("id") Long id) {
-        service.delete(id);
-    } abaixo alteração para retornar a resposta 204 (correto) ao deletar */
+    @Override
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
