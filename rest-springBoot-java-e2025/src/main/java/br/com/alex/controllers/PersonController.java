@@ -8,23 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("api/person/v1")
 @Tag(name = "People", description = "Endpoints for Managingn People") // p/ swagger
 public class PersonController implements PersonControllerDocs {
+
     @Autowired
     private PersonServices service;
-    // private PersonServices service = new PersonServices();
 
     //@RequestMapping(method = RequestMethod.GET, abaixo substitui esse q é legado
-    @GetMapping(
-            produces = {
+    @GetMapping(produces = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_YAML_VALUE}
-    )
+                    MediaType.APPLICATION_YAML_VALUE})
     @Override
     public List<PersonDTO> findAll() {
         return service.findAll();
