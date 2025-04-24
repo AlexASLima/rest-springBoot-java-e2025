@@ -20,9 +20,11 @@ public class PersonController implements PersonControllerDocs {
 
     //@RequestMapping(method = RequestMethod.GET, abaixo substitui esse q é legado
     @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
-
     @Override
     public List<PersonDTO> findAll() {
         return service.findAll();
@@ -31,9 +33,11 @@ public class PersonController implements PersonControllerDocs {
     //@RequestMapping(value = "/{id}",
             //method = RequestMethod.GET,
     @GetMapping(value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
-
     @Override
     public PersonDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
@@ -42,8 +46,14 @@ public class PersonController implements PersonControllerDocs {
     //@RequestMapping(
             //method = RequestMethod.POST,
     @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
     public PersonDTO create(@RequestBody PersonDTO person) {
@@ -53,8 +63,14 @@ public class PersonController implements PersonControllerDocs {
     //@RequestMapping(
             //method = RequestMethod.PUT,
     @PutMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            consumes = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE},
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_YAML_VALUE}
     )
     @Override
     public PersonDTO update(@RequestBody PersonDTO person) {
