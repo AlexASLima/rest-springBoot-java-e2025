@@ -1,9 +1,10 @@
-package br.com.alex.services;
+package br.com.alex.unitTests.services;
 
 import br.com.alex.data.dto.PersonDTO;
 import br.com.alex.exception.RequiredObjectIsNullException;
 import br.com.alex.model.Person;
 import br.com.alex.repository.PersonRepository;
+import br.com.alex.services.PersonServices;
 import br.com.alex.unitTests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

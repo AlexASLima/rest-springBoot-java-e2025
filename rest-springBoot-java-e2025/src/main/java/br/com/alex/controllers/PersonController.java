@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// @CrossOrigin(origins = "http://localhost:8080") geral para classe ou para cada médodo, comantado abaixo.
 @RestController
 @RequestMapping("api/person/v1")
 @Tag(name = "People", description = "Endpoints for Managingn People") // p/ swagger
@@ -19,6 +20,7 @@ public class PersonController implements PersonControllerDocs {
     @Autowired
     private PersonServices service;
 
+    // @CrossOrigin(origins = "http://localhost:8080") * Para cada método.
     //@RequestMapping(method = RequestMethod.GET, abaixo substitui esse q é legado
     @GetMapping(produces = {
                     MediaType.APPLICATION_JSON_VALUE,
@@ -29,6 +31,7 @@ public class PersonController implements PersonControllerDocs {
         return service.findAll();
     }
 
+    // @CrossOrigin(origins = {"http://localhost:8080","https://www.erudio.com.br"})
     //@RequestMapping(value = "/{id}",
             //method = RequestMethod.GET,
     @GetMapping(value = "/{id}",
