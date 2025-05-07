@@ -1,7 +1,7 @@
 package br.com.alex.integrationTests.swagger;
 
 import br.com.alex.config.TestConfigs;
-import br.com.alex.testcontainers.AbstractIntegrationTest;
+import br.com.alex.integrationTests.testcontainers.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

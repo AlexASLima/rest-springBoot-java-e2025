@@ -1,4 +1,4 @@
-package br.com.alex.testcontainers;
+package br.com.alex.integrationTests.testcontainers;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -9,7 +9,6 @@ import org.testcontainers.containers.MySQLContainer;
 //import org.testcontainers.lifecycle.Startables;
 
 import java.util.Map;
-import java.util.stream.Stream;
 
 @ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
 public class AbstractIntegrationTest {
