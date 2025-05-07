@@ -16,6 +16,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 import java.util.List;
@@ -27,15 +34,28 @@ public class PersonServices {
 
     @Autowired
     PersonRepository repository;
+    @Autowired
+    PagedResourcesAssembler<PersonDTO> assembler;
 
-    public List<PersonDTO> findAll() {
+    public PagedModel<EntityModel<PersonDTO>> findAll(Pageable pageable) {
         logger.info("Finding all People!");
 
-        // return ObjectMapper.parseListObjects(repository.findAll(), PersonDTO.class);
-        // como o método usado acima é estatico, pode-se importar como statico e usar diretamente como abaixo. Veja acima como é o import.
-        var persons = parseListObjects(repository.findAll(), PersonDTO.class);
-        persons.forEach(this::addHateoasLinks); // addHateoasLinks(dto); add os links para cada person.
-        return persons;
+        var people = repository.findAll(pageable);
+        var peopleWithLinks = people.map(person -> {
+            var dto = parseObject(person, PersonDTO.class);
+            addHateoasLinks(dto);
+            return dto;
+        });
+
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(PersonController.class)
+                                .findAll(
+                                        pageable.getPageNumber(),
+                                        pageable.getPageSize(),
+                                        String.valueOf(pageable.getSort())))
+                .withSelfRel();
+
+        return assembler.toModel(peopleWithLinks, findAllLink);
     }
 
     public PersonDTO findById(Long id) {
@@ -106,7 +126,7 @@ public class PersonServices {
 
     private void addHateoasLinks(PersonDTO dto) {
         dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
-        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll(1, 12, "asc")).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
         dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));
